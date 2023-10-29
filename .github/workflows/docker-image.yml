@@ -2,23 +2,28 @@ name: Docker Image CI
 
 on:
   push:
-    branches: [ "main" ]
+    branches:
+      - main
 
 jobs:
-
   build:
-
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
-    - name: login to docker hub
-      env: 
-         DOCKER_USERNAME: ${{secrects.DOCKER_USERNAME}}
-         DOCKER_PASS: ${{secrects.DOCKER_PASS}}
-      run: docker -u $DOCKER_USERNAME -u $DOCKER_PASS
-      
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Login to Docker Hub
+      env:
+        DOCKER_USERNAME: ${{secrets.DOCKER_USERNAME}}
+        DOCKER_PASSWORD: ${{secrets.DOCKER_PASS}}
+      run: docker -u $DOCKER_USERNAME -p $DOCKER_PASS
+
     - name: Build the Docker image
-      run: docker build -t actions . 
-    - name: push to docker hub
+      run: docker build -t actions .
+
+    - name: Push to Docker Hub
       run: docker push naveedalirehmani/actions
+
+
+      
