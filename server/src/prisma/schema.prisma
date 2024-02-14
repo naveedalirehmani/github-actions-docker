@@ -1,0 +1,29 @@
+// schema.prisma
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+// User table
+model Users {
+  id       Int      @id @default(autoincrement())
+  username String   @unique
+  email    String   @unique
+  password String
+  sessions Sessions[]
+}
+
+// Session table
+model Sessions {
+  sessionID  Int      @id @default(autoincrement())
+  valid      Boolean
+  userId     Int
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  user       Users     @relation(fields: [userId], references: [id])
+}
